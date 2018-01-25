@@ -1,0 +1,17 @@
+# Output
+/target
+/tmp
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+*.ipr
+*.iml
+*.iws
+.project
+.classpath
+.c9/
+*.launch
+.settings/

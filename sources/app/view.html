@@ -1,0 +1,75 @@
+<div class="container">
+    <div class="page-header">
+        <h1>Kompresja LZW
+            <small>Mateusz Stefaniak 261086</small>
+        </h1>
+    </div>
+    <div class="panel-last-row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Tekst do kompresji</h3>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="data">Tekst do kompresji:</label>
+                        <div class="input-group input-group-lg">
+                            <input type="text" class="form-control" id="data" ng-model="data"
+                                   placeholder="Wpisz tekst do kompresji">
+                            <span class="input-group-addon" id="basic-addon2">{{data ? data.length : 0}}</span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-success"
+                                        type="button"
+                                        ng-click="compress()"
+                                        ng-class="{'disabled': !data || data.length <= 0}">Kompresuj</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="result">
+                <div class="col-md-12">
+                    <h3>Wynik kompresji</h3>
+                </div>
+                <div class="col-md-12">
+                    <div ng-repeat="entry in result.result track by $index"
+                         class="float-left panel panel-default text-center"
+                         style="display: inline-block; width: 48px;">
+                        <div style="white-space: pre;">{{$index}}</div>
+                        <div style="white-space: pre;"><strong>{{entry}}</strong></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <span><strong>Rozmiar: {{result.result.length}}</strong></span>
+                </div>
+            </div>
+            <div class="row" ng-show="result">
+                <div class="col-md-12">
+                    <h3>Słownik</h3>
+                </div>
+                <div class="col-md-12" ng-show="result.dictionary.extended">
+                    <h4>Rozszerzony</h4>
+                </div>
+                <div class="col-md-12" ng-show="result.dictionary.extended">
+                    <div ng-repeat="entry in result.dictionary.extended | orderBy: '+id'"
+                         class="float-left panel panel-default text-center"
+                         ng-style="genEntryStyle(entry)">
+                        <div style="white-space: pre;">{{entry.id}}</div>
+                        <div style="white-space: pre;"><strong>{{entry.value}}</strong></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h4>Podstawowy</h4>
+                </div>
+                <div class="col-md-12">
+                    <div ng-repeat="entry in result.dictionary.base | orderBy: '+id'"
+                         class="float-left panel panel-default text-center"
+                         ng-style="genEntryStyle(entry)">
+                        <div style="white-space: pre;">{{entry.id}}</div>
+                        <div style="white-space: pre;"><strong>{{entry.value}}</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
