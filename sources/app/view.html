@@ -7,53 +7,69 @@
     <div class="panel-last-row">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-md-12">
+                    <div class="col-md-12">
                     <h3>Tekst do kompresji</h3>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="data">Tekst do kompresji:</label>
                         <div class="input-group input-group-lg">
-                            <input type="text" class="form-control" id="data" ng-model="data"
+                            <input type="text" class="form-control"
+                                   id="data"
+                                   ng-model="data"
+                                   ng-readonly="lzw !== null"
                                    placeholder="Wpisz tekst do kompresji">
                             <span class="input-group-addon" id="basic-addon2">{{data ? data.length : 0}}</span>
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-success"
                                         type="button"
-                                        ng-click="compress()"
-                                        ng-class="{'disabled': !data || data.length <= 0}">Kompresuj</button>
+                                        ng-click="makeStep()"
+                                        ng-class="{'disabled': !data || data.length <= 0 || !runnable}">Zrób krok</button>
+                                <button class="btn btn-default btn-warning"
+                                        type="button"
+                                        ng-click="reset()">Resetuj</button>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row" ng-show="result">
+            <div class="row" ng-show="result && result.result.length > 0">
                 <div class="col-md-12">
                     <h3>Wynik kompresji</h3>
                 </div>
                 <div class="col-md-12">
+                    <div class="float-left panel panel-default text-center"
+                         style="display: inline-block; width: 96px; background-color: lightgray">
+                        <div style="white-space: pre;"><strong>NUMER:</strong></div>
+                        <div style="white-space: pre;"><strong>KOD:</strong></div>
+                    </div>
                     <div ng-repeat="entry in result.result track by $index"
                          class="float-left panel panel-default text-center"
-                         style="display: inline-block; width: 48px;">
+                         ng-style="getResultEntryStyle($index, entry)">
                         <div style="white-space: pre;">{{$index}}</div>
                         <div style="white-space: pre;"><strong>{{entry}}</strong></div>
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <span><strong>Rozmiar: {{result.result.length}}</strong></span>
+                    <span><strong>Rozmiar: {{result.result.length}}</strong></span> <span><strong>Krok: {{result.raw.step}}</strong></span>
                 </div>
             </div>
             <div class="row" ng-show="result">
                 <div class="col-md-12">
-                    <h3>Słownik</h3>
+                    <h3>Słownik (kodów)</h3>
                 </div>
-                <div class="col-md-12" ng-show="result.dictionary.extended">
+                <div class="col-md-12" ng-show="result.dictionary.extended && result.dictionary.extended.length > 0">
                     <h4>Rozszerzony</h4>
                 </div>
-                <div class="col-md-12" ng-show="result.dictionary.extended">
+                <div class="col-md-12" ng-show="result.dictionary.extended && result.dictionary.extended.length > 0">
+                    <div class="float-left panel panel-default text-center"
+                         style="display: inline-block; width: 96px; background-color: lightgray">
+                        <div style="white-space: pre;"><strong>NUMER:</strong></div>
+                        <div style="white-space: pre;"><strong>SŁOWO:</strong></div>
+                    </div>
                     <div ng-repeat="entry in result.dictionary.extended | orderBy: '+id'"
                          class="float-left panel panel-default text-center"
-                         ng-style="genEntryStyle(entry)">
+                         ng-style="getDictEntryStyle(entry)">
                         <div style="white-space: pre;">{{entry.id}}</div>
                         <div style="white-space: pre;"><strong>{{entry.value}}</strong></div>
                     </div>
@@ -62,12 +78,27 @@
                     <h4>Podstawowy</h4>
                 </div>
                 <div class="col-md-12">
+                    <div class="float-left panel panel-default text-center"
+                         style="display: inline-block; width: 96px; background-color: lightgray">
+                        <div style="white-space: pre;"><strong>NUMER:</strong></div>
+                        <div style="white-space: pre;"><strong>SŁOWO:</strong></div>
+                    </div>
                     <div ng-repeat="entry in result.dictionary.base | orderBy: '+id'"
                          class="float-left panel panel-default text-center"
-                         ng-style="genEntryStyle(entry)">
+                         ng-style="getDictEntryStyle(entry)">
                         <div style="white-space: pre;">{{entry.id}}</div>
                         <div style="white-space: pre;"><strong>{{entry.value}}</strong></div>
                     </div>
+                </div>
+            </div>
+            <div class="row" ng-show="result && result.result.length > 0">
+                <div class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    Na zielono oznaczane są zmiany względem poprzedniego kroku.
+                </div>
+                <div class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    Kod z wyniku kompresji to numer ze słownika.
                 </div>
             </div>
         </div>
